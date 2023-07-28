@@ -1,4 +1,4 @@
-# rgb: MB2 Rust external RGB demo
+# hello-rgb: MB2 Rust external RGB demo
 Bart Massey 2023
 
 This MicroBit v2 program cycles an external RGB connected to
