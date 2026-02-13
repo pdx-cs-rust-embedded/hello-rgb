@@ -5,13 +5,10 @@ use panic_rtt_target as _;
 use rtt_target::rtt_init_print;
 
 use cortex_m_rt::entry;
+use embedded_hal::{delay::DelayNs, digital::OutputPin};
 use microbit::{
     board::Board,
-    hal::{
-        prelude::*,
-        Timer,
-        gpio::Level,
-    },
+    hal::{gpio::Level, Timer},
 };
 
 #[entry]
@@ -19,14 +16,14 @@ fn main() -> ! {
     rtt_init_print!();
     let board = Board::take().unwrap();
     let mut timer = Timer::new(board.TIMER0);
-    let pin_r = board.pins.p0_10.into_push_pull_output(Level::Low);
-    let pin_g = board.pins.p0_09.into_push_pull_output(Level::Low);
-    let pin_b = board.pins.p1_02.into_push_pull_output(Level::Low);
+    let pin_r = board.edge.e08.into_push_pull_output(Level::Low);
+    let pin_g = board.edge.e09.into_push_pull_output(Level::Low);
+    let pin_b = board.edge.e16.into_push_pull_output(Level::Low);
     let mut pins = [pin_r.degrade(), pin_g.degrade(), pin_b.degrade()];
     let mut index = 0;
     let states = [4, 2, 1, 6, 3, 5, 7, 0];
     let nstates = states.len();
-    
+
     loop {
         let state = states[index];
         for (i, p) in pins.iter_mut().enumerate() {
@@ -36,7 +33,7 @@ fn main() -> ! {
                 p.set_low().unwrap();
             }
         }
-        timer.delay_ms(500u16);
+        timer.delay_ms(500);
         index = (index + 1) % nstates;
     }
 }
