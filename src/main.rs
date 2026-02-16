@@ -39,7 +39,7 @@ fn main() -> ! {
         for brightness in (1..BRIGHTNESSES).chain((1..BRIGHTNESSES).rev()) {
             for _ in 0..CYCLES_PER_BRIGHTNESS {
                 for (i, p) in pins.iter_mut().enumerate() {
-                    if (state >> i) & 1 == 1 {
+                    if (state >> (2 - i)) & 1 == 1 {
                         p.set_low().unwrap();
                     } else {
                         p.set_high().unwrap();
